@@ -125,6 +125,8 @@ for i in range(3998):
 
 注意：一定要保证数值数组的下标和罗马字符数组的下标一致，这样才能保持对应关系。
 
+寻找不超过给定数字的最大值的方法：通过从小到大排序，然后第一个比他小的数据就是不超过给定数字的最大值。
+
 ```python
 class Solution1:
     def intToRoman(self, num: int) -> str:
