@@ -5,7 +5,6 @@ from typing import List
 class Solution:
     def grayCode(self, n: int) -> List[int]:
         res = [0 for x in range(0,int(math.pow(2,n)))]
-
         for i in range(len(res)):
             res[i] = (i >> 1) ^ i
         return res
