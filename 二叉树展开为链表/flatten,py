@@ -1,0 +1,138 @@
+from typing import Optional
+
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+    
+    def create_tree(self, vals):
+        if len(vals) ==  0:
+            return None
+        
+        que = []
+        fill_left = True
+        
+        for val in vals:
+            if val == None:
+                node = None
+            else:
+                node = TreeNode(val)
+            
+            if len(que) == 0:
+                root = node
+                que.append(node)
+            elif fill_left:
+                que[0].left = node
+                if node:
+                    que.append(node)
+                fill_left = False
+            else:
+                que[0].right = node
+                if node:
+                    que.append(node)
+                fill_left = True
+                que.pop(0)
+        return root
+        
+    def show(self,root):
+        if root == None:
+            return []
+        
+        que = [root]
+        res = []
+        while(que):
+            curSize = len(que)
+            tem = []
+            for _ in range(curSize):
+                node = que.pop(0)
+                if node.left:
+                    que.append(node.left)
+                if node.right:
+                    que.append(node.right)
+                tem.append(node.val)
+            res.append(tem)
+        print(res)            
+                
+                            
+class Solution:
+    def flatten(self, root: Optional[TreeNode]) -> None:
+        res = []
+        def preOrder(root):
+            if root == None:
+                return 
+            res.append(root)
+            preOrder(root.left)
+            preOrder(root.right)
+        
+        preOrder(root)
+        
+        ### 用迭代方式进行前序遍历
+        # preorderList = list()
+        # stack = list()  # 存储当前节点，便于后续回溯
+        # node = root
+
+        # while node or stack:
+        #     while node:
+        #         preorderList.append(node)
+        #         stack.append(node)
+        #         node = node.left
+        #     node = stack.pop()
+        #     node = node.right
+             
+        if len(res) == 0:
+            root = None
+        else:
+            for i in range(1,len(res)):
+                pre, curr = res[i-1] , res[i]
+                pre.left = None
+                pre.right = curr
+                
+                
+    def flatten2(self, root: Optional[TreeNode]) -> None:
+        if root == None:
+            return 
+        
+        stack = [root]
+        pre = None
+        
+        while stack:
+            cur = stack.pop()
+            
+            if pre:
+                pre.left = None
+                pre.right = cur
+            
+            if cur.right:
+                stack.append(cur.right)
+            if cur.left:
+                stack.append(cur.left)
+            pre = cur
+          
+    ## 寻找右子树的前驱节点插入      
+    def flatten3(self, root: Optional[TreeNode]) -> None:
+        if root == None:
+            return
+        
+        cur =  root
+        
+        while cur:
+            if cur.left:
+                preOrdernode = next = cur.left
+                while(preOrdernode.right):
+                    preOrdernode = preOrdernode.right
+                preOrdernode.right = cur.right
+                cur.left = None
+                cur.right = next
+            cur = cur.right
+            
+if __name__ == "__main__":
+    vals = [1,2,5,3,4,None,6]
+    t = TreeNode()
+    root = t.create_tree(vals)
+    t.show(root)
+    
+    s = Solution()
+    s.flatten(root)
+    print(root.left)
